@@ -65,4 +65,4 @@ class TicketPageRefresh(Init):
         
 class Notify(Init):
     def Execute(self):
-        os.system('say "your program has finished"')
+        os.system('say "You are ready to buy your tickets"')
