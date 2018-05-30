@@ -33,18 +33,20 @@ class TicketPageRefresh(Init):
     def Execute(self):
         status = True
         while status == True:
+            time.sleep(int(self.config.get('ticketswap', 'delay')))
             self.browser.get(self.config.get('ticketswap', 'ticketurl'))
             available = self.browser.find_element_by_class_name('counter-value').text
             print("Er zijn %s tickets te koop" % available)
             if available == '0':
                 status == True
             else:
+                count = 0
                 item = self.browser.find_element_by_class_name('listings-item')
                 item.click()
                 status2 = True
                 while status2 == True:
                     try:
-                        buy = WebDriverWait(self.browser, 0.8).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
+                        buy = WebDriverWait(self.browser, self.config.get('ticketswap', 'delay')).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
                         buy.click()
                         status = False
                         status2 = False

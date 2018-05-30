@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 config = configparser.ConfigParser()
 config.read(os.path.expanduser('settings.ini'))
 browser = selenium.webdriver.Chrome()
-count = 0
 
 path = [TicketswapLogin, TicketPageRefresh, Notify]
 for step in path:
