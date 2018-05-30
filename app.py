@@ -10,7 +10,12 @@ from steps import (
 
 logger = logging.getLogger(__name__)
 config = configparser.ConfigParser()
-config.read(os.path.expanduser('settings.ini'))
+
+if os.name == 'nt':
+    config.read(os.path.expanduser('C:\\settings.ini'))
+else:
+    config.read(os.path.expanduser('~/.config/settings.ini'))
+
 browser = selenium.webdriver.Chrome()
 
 path = [TicketswapLogin, TicketPageRefresh, Notify]
@@ -20,3 +25,4 @@ for step in path:
         current_step.Execute()
     except Exception as e:
         logger.exception(e)
+
