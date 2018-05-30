@@ -31,6 +31,11 @@ class TicketswapLogin(Init):
 
 class TicketPageRefresh(Init):
     def Execute(self):
+        language = self.config.get('ticketswap', 'language')
+        if language == "Dutch":
+            f = "afrekenen"
+        else:
+            f = "paying"
         status = True
         while status == True:
             time.sleep(int(self.config.get('ticketswap', 'delay')))
@@ -46,13 +51,13 @@ class TicketPageRefresh(Init):
                 status2 = True
                 while status2 == True:
                     try:
-                        buy = WebDriverWait(self.browser, self.config.get('ticketswap', 'delay')).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
+                        buy = WebDriverWait(self.browser, 0.8).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
                         buy.click()
                         status = False
                         status2 = False
                     except:
-                        unavailable = self.browser.find_element_by_class_name('listing-unavailable').text
-                        if 'afrekenen' not in unavailable:
+                        unavailable = WebDriverWait(self.browser, 0.2).until(EC.presence_of_element_located((By.CLASS_NAME, "listing-unavailable"))).text
+                        if f not in unavailable:
                             print("Tickets zijn verkocht, terug naar overzicht voor %s" % self.config.get('ticketswap', 'ticketname'))
                             status = True
                             status2 = False
