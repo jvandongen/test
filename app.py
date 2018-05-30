@@ -25,4 +25,3 @@ for step in path:
         current_step.Execute()
     except Exception as e:
         logger.exception(e)
-
