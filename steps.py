@@ -8,6 +8,13 @@ class Init:
     def __init__(self, config, browser):
         self.config = config
         self.browser = browser
+        language = self.config.get('ticketswap', 'language')
+        if language == "Dutch":
+            self.f = "afrekenen"
+            self.b = "Inloggen"
+        else:
+            self.f = "paying"
+            self.b = "Login"
 
     def Execute(self):
         raise NotImplementedError()
@@ -15,7 +22,7 @@ class Init:
 class TicketswapLogin(Init):
     def Execute(self):
         self.browser.get(self.config.get('ticketswap', 'eventurl'))
-        login_with_facebook = self.browser.find_element_by_link_text('Inloggen')
+        login_with_facebook = self.browser.find_element_by_link_text(self.b)
         login_with_facebook.click()
         login_with_facebook2 = self.browser.find_element_by_class_name('login-button--facebook')
         login_with_facebook2.click()
@@ -27,21 +34,15 @@ class TicketswapLogin(Init):
         login = self.browser.find_element_by_name('login')
         login.click()
         self.browser.switch_to_window(self.browser.window_handles[0])
-        time.sleep(2)
+        time.sleep(3)
 
 class TicketPageRefresh(Init):
     def Execute(self):
-        language = self.config.get('ticketswap', 'language')
-        if language == "Dutch":
-            f = "afrekenen"
-        else:
-            f = "paying"
         status = True
         while status == True:
             time.sleep(int(self.config.get('ticketswap', 'delay')))
             self.browser.get(self.config.get('ticketswap', 'ticketurl'))
             available = self.browser.find_element_by_class_name('counter-value').text
-            print("Er zijn %s tickets te koop" % available)
             if available == '0':
                 status == True
             else:
@@ -57,13 +58,13 @@ class TicketPageRefresh(Init):
                         status2 = False
                     except:
                         unavailable = WebDriverWait(self.browser, 0.2).until(EC.presence_of_element_located((By.CLASS_NAME, "listing-unavailable"))).text
-                        if f not in unavailable:
-                            print("Tickets zijn verkocht, terug naar overzicht voor %s" % self.config.get('ticketswap', 'ticketname'))
+                        if self.f not in unavailable:
+                            print("Tickets are sold, returning to the overview for %s" % self.config.get('ticketswap', 'ticketname'))
                             status = True
                             status2 = False
                         else:
                             count = count + 1
-                            print("Iemand anders is aan het afrekenen, refreshing... (%s)" % count)
+                            print("Someone else is already paying, refreshing... (%s)" % count)
                             self.browser.refresh()
         ideal = WebDriverWait(self.browser, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "button--success")))
         ideal.click()
