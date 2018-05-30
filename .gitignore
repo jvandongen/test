@@ -5,3 +5,4 @@ ENV/
 *.ini
 __pycache__/
 *.egg-info/
+*.DS_Store
