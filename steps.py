@@ -68,7 +68,6 @@ class TicketPageRefresh(Init):
                         status = False
                         status2 = False
                     except:
-
                         unavailable = self.browser.find_element_by_class_name('listing-unavailable').text
                         if _('afrekenen') not in unavailable:
                             print(_("Tickets zijn verkocht, terug naar overzicht voor %s") % self.config.get('ticketswap', 'ticketname'))
