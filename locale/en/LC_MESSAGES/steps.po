@@ -1,0 +1,38 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-05-31 09:11+0200\n"
+"PO-Revision-Date: 2018-05-31 09:18+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.7\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language: en\n"
+"X-Poedit-SearchPath-0: steps.py\n"
+
+#: steps.py:22
+msgid "Inloggen"
+msgstr "Login"
+
+#: steps.py:43
+#, python-format
+msgid "Er zijn %s tickets te koop"
+msgstr "There are %s tickets for sale"
+
+#: steps.py:59
+msgid "afrekenen"
+msgstr "paying"
+
+#: steps.py:60
+#, python-format
+msgid "Tickets zijn verkocht, terug naar overzicht voor %s"
+msgstr "Tickets are sold back to overview for %s"
+
+#: steps.py:65
+#, python-format
+msgid "Iemand anders is aan het afrekenen, refreshing... (%s)"
+msgstr "Someone else is at checkout, refreshing... ( %s)"
