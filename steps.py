@@ -10,16 +10,17 @@ class Init:
     def __init__(self, config, browser):
         self.config = config
         self.browser = browser
-        if self.config.get('ticketswap', 'language').lower() == 'dutch':
+        self.language = self.config.get('ticketswap', 'language').lower()
+        if self.language == 'dutch':
             nl = gettext.translation('steps', localedir='locale', languages=['nl'])
             nl.install()
-        elif self.config.get('ticketswap', 'language').lower() == 'english':
+        elif self.language == 'english':
             en = gettext.translation('steps', localedir='locale', languages=['en'])
             en.install()
-        elif self.config.get('ticketswap', 'language').lower() == 'spanish':
+        elif self.language == 'spanish':
             es = gettext.translation('steps', localedir='locale', languages=['es'])
             es.install()
-        elif self.config.get('ticketswap', 'language').lower() == 'german':
+        elif self.language == 'german':
             de = gettext.translation('steps', localedir='locale', languages=['de'])
             de.install()
         else:
