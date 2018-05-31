@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 class Init:
     def __init__(self, config, browser):
         self.config = config
@@ -28,6 +29,7 @@ class Init:
     def Execute(self):
         raise NotImplementedError()
 
+
 class TicketswapLogin(Init):
     def Execute(self):
         self.browser.get(self.config.get('ticketswap', 'eventurl'))
@@ -44,6 +46,7 @@ class TicketswapLogin(Init):
         login.click()
         self.browser.switch_to_window(self.browser.window_handles[0])
         time.sleep(3)
+
 
 class TicketPageRefresh(Init):
     def Execute(self):
@@ -63,7 +66,8 @@ class TicketPageRefresh(Init):
                 status2 = True
                 while status2 == True:
                     try:
-                        buy = WebDriverWait(self.browser, 0.8).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
+                        buy = WebDriverWait(self.browser, 0.8).until(
+                            EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
                         buy.click()
                         status = False
                         status2 = False
@@ -79,7 +83,8 @@ class TicketPageRefresh(Init):
                             self.browser.refresh()
         ideal = WebDriverWait(self.browser, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "button--success")))
         ideal.click()
-        
+
+
 class Notify(Init):
     def Execute(self):
         os.system('say "You are ready to buy your tickets"')
