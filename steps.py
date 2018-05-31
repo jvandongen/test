@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 class Init:
     def __init__(self, config, browser):
         self.config = config
@@ -18,6 +19,7 @@ class Init:
 
     def Execute(self):
         raise NotImplementedError()
+
 
 class TicketswapLogin(Init):
     def Execute(self):
@@ -36,6 +38,7 @@ class TicketswapLogin(Init):
         self.browser.switch_to_window(self.browser.window_handles[0])
         time.sleep(3)
 
+
 class TicketPageRefresh(Init):
     def Execute(self):
         status = True
@@ -52,7 +55,8 @@ class TicketPageRefresh(Init):
                 status2 = True
                 while status2 == True:
                     try:
-                        buy = WebDriverWait(self.browser, 0.8).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
+                        buy = WebDriverWait(self.browser, 0.8).until(
+                            EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
                         buy.click()
                         status = False
                         status2 = False
@@ -60,6 +64,7 @@ class TicketPageRefresh(Init):
                         unavailable = WebDriverWait(self.browser, 0.2).until(EC.presence_of_element_located((By.CLASS_NAME, "listing-unavailable"))).text
                         if self.f not in unavailable:
                             print("Tickets are sold, returning to the overview for %s" % self.config.get('ticketswap', 'ticketname'))
+
                             status = True
                             status2 = False
                         else:
@@ -68,7 +73,8 @@ class TicketPageRefresh(Init):
                             self.browser.refresh()
         ideal = WebDriverWait(self.browser, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "button--success")))
         ideal.click()
-        
+
+
 class Notify(Init):
     def Execute(self):
         os.system('say "You are ready to buy your tickets"')
