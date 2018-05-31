@@ -43,7 +43,7 @@ class TicketswapLogin(Init):
         login = self.browser.find_element_by_name('login')
         login.click()
         self.browser.switch_to_window(self.browser.window_handles[0])
-        time.sleep(2)
+        time.sleep(3)
 
 class TicketPageRefresh(Init):
     def Execute(self):
@@ -53,6 +53,7 @@ class TicketPageRefresh(Init):
             self.browser.get(self.config.get('ticketswap', 'ticketurl'))
             available = self.browser.find_element_by_class_name('counter-value').text
             print(_("Er zijn %s tickets te koop") % available)
+
             if available == '0':
                 status == True
             else:
@@ -62,11 +63,12 @@ class TicketPageRefresh(Init):
                 status2 = True
                 while status2 == True:
                     try:
-                        buy = WebDriverWait(self.browser, self.config.get('ticketswap', 'delay')).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
+                        buy = WebDriverWait(self.browser, 0.8).until(EC.presence_of_element_located((By.CLASS_NAME, "btn-buy")))
                         buy.click()
                         status = False
                         status2 = False
                     except:
+
                         unavailable = self.browser.find_element_by_class_name('listing-unavailable').text
                         if _('afrekenen') not in unavailable:
                             print(_("Tickets zijn verkocht, terug naar overzicht voor %s") % self.config.get('ticketswap', 'ticketname'))
