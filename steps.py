@@ -1,3 +1,4 @@
+import gettext
 import time
 import os
 from selenium.webdriver.common.by import By
@@ -9,13 +10,21 @@ class Init:
     def __init__(self, config, browser):
         self.config = config
         self.browser = browser
-        language = self.config.get('ticketswap', 'language')
-        if language == "Dutch":
-            self.f = "afrekenen"
-            self.b = "Inloggen"
+        if self.config.get('ticketswap', 'language').lower() == 'dutch':
+            nl = gettext.translation('steps', localedir='locale', languages=['nl'])
+            nl.install()
+        elif self.config.get('ticketswap', 'language').lower() == 'english':
+            en = gettext.translation('steps', localedir='locale', languages=['en'])
+            en.install()
+        elif self.config.get('ticketswap', 'language').lower() == 'spanish':
+            es = gettext.translation('steps', localedir='locale', languages=['es'])
+            es.install()
+        elif self.config.get('ticketswap', 'language').lower() == 'german':
+            de = gettext.translation('steps', localedir='locale', languages=['de'])
+            de.install()
         else:
-            self.f = "paying"
-            self.b = "Login"
+            nl = gettext.translation('steps', localedir='locale', languages=['nl'])
+            nl.install()
 
     def Execute(self):
         raise NotImplementedError()
@@ -24,7 +33,7 @@ class Init:
 class TicketswapLogin(Init):
     def Execute(self):
         self.browser.get(self.config.get('ticketswap', 'eventurl'))
-        login_with_facebook = self.browser.find_element_by_link_text(self.b)
+        login_with_facebook = self.browser.find_element_by_link_text(_('Inloggen'))
         login_with_facebook.click()
         login_with_facebook2 = self.browser.find_element_by_class_name('login-button--facebook')
         login_with_facebook2.click()
@@ -46,6 +55,8 @@ class TicketPageRefresh(Init):
             time.sleep(int(self.config.get('ticketswap', 'delay')))
             self.browser.get(self.config.get('ticketswap', 'ticketurl'))
             available = self.browser.find_element_by_class_name('counter-value').text
+            print(_("Er zijn %s tickets te koop") % available)
+
             if available == '0':
                 status == True
             else:
@@ -61,15 +72,14 @@ class TicketPageRefresh(Init):
                         status = False
                         status2 = False
                     except:
-                        unavailable = WebDriverWait(self.browser, 0.2).until(EC.presence_of_element_located((By.CLASS_NAME, "listing-unavailable"))).text
-                        if self.f not in unavailable:
-                            print("Tickets are sold, returning to the overview for %s" % self.config.get('ticketswap', 'ticketname'))
-
+                        unavailable = self.browser.find_element_by_class_name('listing-unavailable').text
+                        if _('afrekenen') not in unavailable:
+                            print(_("Tickets zijn verkocht, terug naar overzicht voor %s") % self.config.get('ticketswap', 'ticketname'))
                             status = True
                             status2 = False
                         else:
                             count = count + 1
-                            print("Someone else is already paying, refreshing... (%s)" % count)
+                            print(_("Iemand anders is aan het afrekenen, refreshing... (%s)") % count)
                             self.browser.refresh()
         ideal = WebDriverWait(self.browser, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "button--success")))
         ideal.click()
